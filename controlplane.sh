@@ -26,12 +26,6 @@ sudo systemctl enable containerd
 wget https://github.com/opencontainers/runc/releases/download/v1.1.10/runc.amd64
 sudo install -m 755 runc.amd64 /usr/local/sbin/runc
 
-# Install CNI
-wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz
-sudo mkdir -p /opt/cni/bin
-sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.4.0.tgz
-
-
 # Add Kubernetes apt repository
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -66,8 +60,9 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#Install Pod network add-on plugin
+#Install Pod network add-on plugin & CNI
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 wget https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
 sed -i 's/192\.168\.0\.0\/16/10.244.0.0\/16/g' custom-resources.yaml
 sudo kubectl apply -f custom-resources.yaml

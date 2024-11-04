@@ -19,11 +19,6 @@ sudo systemctl enable containerd
 wget https://github.com/opencontainers/runc/releases/download/v1.1.10/runc.amd64
 sudo install -m 755 runc.amd64 /usr/local/sbin/runc
 
-# Install CNI
-wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz
-sudo mkdir -p /opt/cni/bin
-sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.4.0.tgz
-
 #forward packets
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
