@@ -62,10 +62,10 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 #Install Pod network add-on plugin & CNI
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 wget https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
 sed -i 's/192\.168\.0\.0\/16/10.244.0.0\/16/g' custom-resources.yaml
 sudo kubectl apply -f custom-resources.yaml
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
 # Generate join command for worker nodes
 JOIN_CMD=$(kubeadm token create --print-join-command)
