@@ -34,23 +34,26 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 sudo apt-get update -y
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
-sudo systemctl enable --now kubelet
 
-#forward packets
+# Load necessary modules for kubelet
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
 sudo modprobe overlay
 sudo modprobe br_netfilter
-# sysctl params required by setup, params persist across reboots
+
+# Apply sysctl params without reboot
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
-# Apply sysctl params without reboot
 sudo sysctl --system
+
+# Enable and start kubelet
+sudo systemctl enable --now kubelet
+sleep 10
 
 # Initialize Kubernetes with containerd as the runtime
 sudo kubeadm init --cri-socket /run/containerd/containerd.sock --pod-network-cidr=10.244.0.0/16
@@ -60,12 +63,12 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#Install Pod network add-on plugin & CNI
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+# Install Calico network plugin
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
 wget https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
 sed -i 's/192\.168\.0\.0\/16/10.244.0.0\/16/g' custom-resources.yaml
-sudo kubectl apply -f custom-resources.yaml
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+kubectl apply -f custom-resources.yaml
+
 
 # Generate join command for worker nodes
 JOIN_CMD=$(kubeadm token create --print-join-command)
