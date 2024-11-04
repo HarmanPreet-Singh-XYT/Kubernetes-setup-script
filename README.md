@@ -22,6 +22,22 @@ Here're some of the project's best features:
 *   From Scratch to Intialising Kubeadm
 
 <h2>🛠️ Installation Steps:</h2>
+<h3>There are two ways to run script</h3>
+<h3>Primary Method</h3>
+<p> Run these Scripts</p>
+<p>1. for control plane </p>
+
+```
+sudo wget -qO- https://raw.githubusercontent.com/HarmanPreet-Singh-XYT/Kubernetes-setup-script/refs/heads/main/controlplane.sh | bash
+```
+
+<p>2. for Worker Node </p>
+
+```
+sudo wget -qO- https://raw.githubusercontent.com/HarmanPreet-Singh-XYT/Kubernetes-setup-script/refs/heads/main/worker.sh | bash
+```
+
+<h3> Other Method </h3>
 
 <p>1. Set Up the Control Plane Node</p>
 
