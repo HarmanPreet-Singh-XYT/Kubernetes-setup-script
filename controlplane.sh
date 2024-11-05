@@ -56,7 +56,7 @@ sudo systemctl enable --now kubelet
 sleep 10
 
 # Initialize Kubernetes with containerd as the runtime
-sudo kubeadm init --cri-socket /run/containerd/containerd.sock --pod-network-cidr=10.244.0.0/16
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 
 # Set up kubeconfig for the current user (if non-root)
 mkdir -p $HOME/.kube
