@@ -34,7 +34,7 @@ sudo wget -qO- https://raw.githubusercontent.com/HarmanPreet-Singh-XYT/Kubernete
 <p>2. for Worker Node </p>
 
 ```
-sudo wget -qO- https://github.com/HarmanPreet-Singh-XYT/Kubernetes-setup-script/blob/main/Kubernetes/worker.sh | bash
+sudo wget -qO- https://raw.githubusercontent.com/HarmanPreet-Singh-XYT/Kubernetes-setup-script/refs/heads/main/Kubernetes/worker.sh | bash
 ```
 
 <h3> Other Method </h3>
