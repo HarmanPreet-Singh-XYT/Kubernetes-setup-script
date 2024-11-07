@@ -56,7 +56,7 @@ sudo systemctl enable --now kubelet
 sleep 10
 
 # Initialize Kubernetes with containerd as the runtime
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+sudo kubeadm init
 
 # Set up kubeconfig for the current user (if non-root)
 mkdir -p $HOME/.kube
@@ -64,11 +64,14 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # Install Calico network plugin
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
-wget https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
-sed -i 's/192\.168\.0\.0\/16/10.244.0.0\/16/g' custom-resources.yaml
-kubectl apply -f custom-resources.yaml
-kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+# kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+# wget https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
+# sed -i 's/192\.168\.0\.0\/16/10.244.0.0\/16/g' custom-resources.yaml
+# kubectl apply -f custom-resources.yaml
+# kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+
+#Install Kindnet network plugin
+kubectl create -f https://raw.githubusercontent.com/aojea/kindnet/main/install-kindnet.yaml
 
 # Generate join command for worker nodes
 JOIN_CMD=$(kubeadm token create --print-join-command)
